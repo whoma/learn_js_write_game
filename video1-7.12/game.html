@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>game video1</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="400px" height="300px"></canvas>
+
+    <script>
+        var log = console.log.bind(console);
+
+        var Game = function () {
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var o = {
+                keydowns: {},
+                actions: {},
+                canvas: canvas,
+                context: context,
+            }
+            //事件绑定
+            o.registerAction = function (key, action) {
+                o.actions[key] = action;
+            }
+            window.addEventListener("keydown", function (e) {
+                o.keydowns[e.key] = true;
+            });
+            window.addEventListener("keyup", function (e) {
+                o.keydowns[e.key] = false;
+            });
+            o.drawImage = function (gameImage) {
+                o.context.drawImage(gameImage.img, gameImage.x, gameImage.y);
+            }
+            setInterval(function () {
+                // 查询 key 是否是 按下
+                // events
+                var keys = Object.keys(o.actions);
+                for (var i = 0; i < keys.length; i++) {
+                    if (o.keydowns[keys[i]]) {
+                        o.actions[keys[i]]();
+                    }
+                }
+                // update
+                o.update();
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                // draw
+                o.draw();
+            }, 1000 / 30);
+
+            return o;
+        }
+
+        var imageForPath = function (path) {
+            var img = new Image();
+            img.src = path;
+            return img;
+        }
+        var Paddle = function () {
+            var o = {
+                x: 100,
+                y: 200,
+                speed: 10
+            };
+
+            // width 200px height 30px
+            o.img = imageForPath('image.png');
+            o.moveLeft = function () {
+                o.x -= o.speed;
+            }
+            o.moveRight = function () {
+                o.x += o.speed;
+            }
+            o.collide = function (ball) {
+                if (ball.y + ball.img.height > o.y) {
+                    if (ball.x > o.x && ball.x < o.img.width + o.x) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return o;
+        }
+
+        var Ball = function () {
+            var o = {
+                x: 180,
+                y: 160,
+                speedX: 15,
+                speedY: 15,
+                fired: false,
+            };
+
+            // width 200px height 30px
+            o.img = imageForPath('ball.png');
+            o.move = function () {
+                if (o.fired) {
+                    //log('move');
+                    if (o.x < 0 || o.x + o.img.width > 400) {
+                        o.speedX *= -1;
+                    }
+                    if (o.y < 0 || o.y + o.img.height > 300) {
+                        o.speedY *= -1;
+
+                    }
+                    o.x += o.speedX;
+                    o.y += o.speedY;
+                }
+            }
+
+            o.fire = function () {
+                o.fired = true;
+            }
+
+            return o;
+        }
+
+        var __main = function () {
+
+            var game = Game();
+
+            var paddle = Paddle();
+
+            var ball = Ball();
+
+            game.registerAction('a', function () {
+                paddle.moveLeft();
+            });
+
+            game.registerAction('d', function () {
+                paddle.moveRight();
+            })
+
+            game.registerAction('f', function () {
+                ball.fire();
+            })
+
+            game.update = function () {
+                ball.move();
+
+                // 判断相撞
+                if (paddle.collide(ball)) {
+                    ball.speedY *= -1;
+                };
+
+            };
+
+            game.draw = function () {
+                game.drawImage(paddle);
+                game.drawImage(ball);
+            };
+        }
+
+        __main()
+
+    </script>
+</body>
+
+</html>
