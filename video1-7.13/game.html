@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>game video1</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+    <script src="game.js"></script>
+    <script src="paddle.js"></script>
+    <script src="ball.js"></script>
+    <script src="block.js"></script>
+    <script src="utils.js"></script>
+    <script src="level.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas" width="400px" height="300px"></canvas>
+    <hr>
+    <input type="range" id="input-range" value="1" min="1">
+    <script>
+
+        var loadLevel = function (n) {
+            n = n - 1;
+            var level = levels[n]
+            var blocks = [];
+            for (let p of level) {
+                let b = Block(p);
+                blocks.push(b);
+            }
+
+            return blocks;
+        };
+        var blocks = [];
+        var enableDebugModel = function (enable) {
+            if (!enable) {
+                return
+            }
+
+            window.pause = false;
+            window.addEventListener('keydown', function (event) {
+                var k = event.key;
+                // 暂停
+                if (k === "p") {
+                    window.pause = !window.pause;
+                // 加载关卡 与 level.js 关联
+                } else if ("12".indexOf(k) != -1) {
+                    blocks = loadLevel(Number(k));
+                }
+            });
+
+            document.querySelector('#input-range').addEventListener('input', function (event) {
+                var input = event.target;
+                window.fps = Number(input.value);
+            });
+
+        }
+
+        var __main = function () {
+            enableDebugModel(true);
+            var game = Game(30);
+            var paddle = Paddle();
+            var ball = Ball();
+
+            game.registerAction('a', function () {
+                paddle.moveLeft();
+            });
+
+            game.registerAction('d', function () {
+                paddle.moveRight();
+            })
+
+            game.registerAction('f', function () {
+                ball.fire();
+            })
+
+            game.update = function () {
+                if (!window.pause) {
+                    ball.move();
+                }
+
+                // 判断相撞
+                if (paddle.collide(ball)) {
+                    ball.rebound();
+                };
+
+                for (let block of blocks) {
+                    // 方块与圆 判断相撞
+                    if (block.collide(ball)) {
+                        block.kill();
+                        ball.rebound();
+                    }
+                }
+            };
+
+            game.draw = function () {
+                game.drawImage(paddle);
+                game.drawImage(ball);
+
+                for (let block of blocks) {
+                    if (block.alive) {
+                        game.drawImage(block);
+                    }
+                }
+            };
+        }
+
+        __main()
+
+    </script>
+</body>
+
+</html>
