@@ -4,11 +4,11 @@ var Ball = function (game) {
     var img = game.imageByName('ball');
 
     var o = img;
-    o.speedX = 15;
-    o.speedY = 15;
+    o.speedX = 5;
+    o.speedY = 5;
     o.fired = false;
-    o.x = 180;
-    o.y = 210;
+    o.x = 100;
+    o.y = 200;
 
     o.move = function () {
         if (o.fired) {

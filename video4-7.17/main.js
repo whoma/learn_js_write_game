@@ -65,14 +65,16 @@ var __main = function () {
         var score = 0;
 
         game.update = function () {
-            if (!window.pause) {
-                ball.move();
+            if (window.pause) {
+                return;
             }
 
             // 判断相撞
             if (paddle.collide(ball)) {
                 ball.rebound();
-            };
+            }
+
+            ball.move();
 
             for (let block of blocks) {
                 // 方块与圆 判断相撞
@@ -85,31 +87,34 @@ var __main = function () {
                 }
             }
 
-            var enableDrag = false;
 
-            game.canvas.addEventListener("mousedown", function (event) {
-                let x = event.offsetX;
-                let y = event.offsetY;
-                if (ball.hasPoint(x, y)) {
-                    enableDrag = true;
-                }
-            });
-
-            game.canvas.addEventListener("mousemove", function (event) {
-                let x = event.offsetX;
-                let y = event.offsetY;
-                if (enableDrag) {
-                    //log('enableDrag');
-                    ball.x = x;
-                    ball.y = y;
-                }
-            });
-
-            game.canvas.addEventListener("mouseup", function (event) {
-                enableDrag = false;
-            });
 
         };
+
+        var enableDrag = false;
+
+        game.canvas.addEventListener("mousedown", function (event) {
+            let x = event.offsetX;
+            let y = event.offsetY;
+            if (ball.hasPoint(x, y)) {
+                enableDrag = true;
+            }
+        });
+
+        game.canvas.addEventListener("mousemove", function (event) {
+            let x = event.offsetX;
+            let y = event.offsetY;
+            if (enableDrag) {
+                //log('enableDrag');
+                ball.x = x;
+                ball.y = y;
+            }
+        });
+
+        game.canvas.addEventListener("mouseup", function (event) {
+            enableDrag = false;
+        });
+
 
         game.draw = function () {
 
