@@ -1,6 +1,6 @@
 'use strict'
 
-var log = console.log.bind(console);
+const log = console.log.bind(console);
 /*
 var log = function (r) {
     document.querySelector('#input-text').value += r + '\r\n';
@@ -13,11 +13,23 @@ var log = function (r) {
 //     return img;
 // }
 
-var rectIntersect = function (a, b) {
+const rectIntersect = (a, b) => {
     if (a.x + a.width >= b.x && a.x + a.width <= b.x + b.width) {
         if (b.y + b.height >= a.y && b.y + b.height <= a.y + a.height) {
             return true;
         }
     }
     return false;
+}
+
+const randomBetween = (start, end) => {
+    let n = Math.random() * (end - start + 1);
+    return Math.floor(n) + start;
+}
+
+const config = {
+    player_speed: 10,
+    coolDow: 5,
+    cloud_speed: 2,
+    bullet_speed: 5,
 }

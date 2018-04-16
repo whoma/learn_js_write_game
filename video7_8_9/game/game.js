@@ -19,19 +19,20 @@ class Game {
         return this.i;
     }
 
+    registerAction(key, action) {
+        this.actions[key] = action;
+    }
+
     init() {
-        this.registerAction = (key, action) => {
-            this.actions[key] = action;
-        }
-        window.addEventListener("keydown",(e) => {
+        window.addEventListener("keydown", (e) => {
             this.keydowns[e.key] = true;
         });
-        window.addEventListener("keyup",(e) => {
+        window.addEventListener("keyup", (e) => {
             this.keydowns[e.key] = false;
         });
 
         this.context.font = "20px Georgia";
-        
+
 
         // 预习载入所有图片
         var loads = [];

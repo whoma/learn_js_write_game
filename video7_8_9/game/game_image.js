@@ -9,4 +9,8 @@ class Game_Image {
         this.width = this.texture.width;
         this.height = this.texture.height;
     }
+
+    update() {
+        
+    }
 }

@@ -42,6 +42,12 @@ var __main = function () {
         background: "img/background.png",
         player: "img/player.png",
         cloud: "img/cloud.png",
+        bullet: "img/bullet.png",
+        enemy0: "img/enemy0.png",
+        enemy1: "img/enemy1.png",
+        enemy2: "img/enemy2.png",
+        enemy3: "img/enemy3.png",
+        enemy4: "img/enemy4.png",
     }
     //
     var game = Game.getInstance(30, images, function (g) {
