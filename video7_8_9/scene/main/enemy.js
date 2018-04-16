@@ -12,6 +12,7 @@ class Enemy extends Game_Image {
         this.x = randomBetween(0, 320);
         this.y = -randomBetween(0, 200);
         this.speed = 5;
+        this.life = true;
     }
 
     update() {
@@ -19,5 +20,10 @@ class Enemy extends Game_Image {
         if (this.y > 568) {
             this.setup();
         }
+
+    } 
+    
+    collide(bullet) {
+        return rectIntersect(this, bullet) || rectIntersect(bullet, this);
     }
 } 

@@ -29,7 +29,7 @@ const randomBetween = (start, end) => {
 
 const config = {
     player_speed: 10,
-    coolDow: 5,
+    coolDown: 5,
     cloud_speed: 2,
     bullet_speed: 5,
 }

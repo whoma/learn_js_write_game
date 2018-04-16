@@ -36,26 +36,29 @@ var enableDebugModel = function (game, enable) {
 
 }
 
-var __main = function () {
-    // 加载图片
-    var images = {
-        background: "img/background.png",
-        player: "img/player.png",
-        cloud: "img/cloud.png",
-        bullet: "img/bullet.png",
-        enemy0: "img/enemy0.png",
-        enemy1: "img/enemy1.png",
-        enemy2: "img/enemy2.png",
-        enemy3: "img/enemy3.png",
-        enemy4: "img/enemy4.png",
+// DOM finish do
+window.onload = function () {
+    var __main = function () {
+        // 加载图片
+        var images = {
+            background: "img/background.png",
+            player: "img/player.png",
+            cloud: "img/cloud.png",
+            bullet: "img/bullet.png",
+            enemy0: "img/enemy0.png",
+            enemy1: "img/enemy1.png",
+            enemy2: "img/enemy2.png",
+            enemy3: "img/enemy3.png",
+            enemy4: "img/enemy4.png",
+            fire: "img/fire.png",
+        }
+        //
+        var game = Game.getInstance(30, images, function (g) {
+            var s = new Scene(g);
+            g.runWithScene(s);
+        });
+
+        enableDebugModel(game, true);
     }
-    //
-    var game = Game.getInstance(30, images, function (g) {
-        var s = new Scene(g);
-        g.runWithScene(s);
-    });
-
-    enableDebugModel(game, true);
+    __main()
 }
-
-__main()

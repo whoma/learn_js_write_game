@@ -23,6 +23,8 @@
     <script src="scene/main/bullet.js"></script>
     <script src="scene/main/cloud.js"></script>
     <script src="scene/main/scene.js"></script>
+    <script src="scene/main/particle.js"></script>
+    <script src="scene/main/game_particle.js"></script>
 
     <script src="scene/end/scene_end.js"></script>
 
@@ -44,7 +46,7 @@
     </div>
     <div>
             <label>
-                <input type="range" class="game_auto_slider" value="5" min="1" max="10" data-value="config.coolDown"> 
+                <input type="range" class="game_auto_slider" value="5" min="1" max="50" data-value="config.coolDown"> 
                 冷却时间:<span class="game_label">5</span>
             </label>
     </div>
@@ -60,17 +62,18 @@
                 子弹速度:<span class="game_label">5</span>
             </label>
     </div>
+    <audio src="./audio/bullet.mp3" id="audio_bullet" hidden></audio>
+    <audio src="./audio/enemy_down.mp3" id="audio_enemy_down" hidden></audio>
     <script>
         var el = sel => document.querySelectorAll(sel);
         var bindAll = (name, eventName, callback) => {
             var els = el(name);
             for (let e of els) {
-               e.addEventListener(eventName, function (event) {
+               e.addEventListener(eventName, (event) => {
                     callback(event);
                 })
             }
         }
-
         bindAll('.game_auto_slider', 'input', (event) => {
             let target = event.target;
             let bindVar = target.dataset.value;

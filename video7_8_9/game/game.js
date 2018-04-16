@@ -10,8 +10,14 @@ class Game {
         this.images = images;
         this.imgs = {};
         this.callback = callback;
+        this.setAudio();
         //事件绑定
         this.init();
+    }
+
+    setAudio() {
+        this.audio_bullet = document.getElementById('audio_bullet');
+        this.audio_enemy_down = document.getElementById('audio_enemy_down');
     }
 
     static getInstance(...args) {
@@ -32,8 +38,6 @@ class Game {
         });
 
         this.context.font = "20px Georgia";
-
-
         // 预习载入所有图片
         var loads = [];
         var names = Object.keys(this.images);
@@ -51,7 +55,6 @@ class Game {
                 }
             }
         }
-
     }
 
     drawImage(gameImage) {
@@ -69,12 +72,10 @@ class Game {
         this.context.fillStyle = "#3d4d4f";
         this.context.fillRect(0, 0, 400, 300);
     }
-
     // update
     update() {
         this.scene.update();
     }
-
     // draw
     draw() {
         this.scene.draw();
@@ -122,7 +123,7 @@ class Game {
             this.loopRun();
         }, 1000 / window.fps);
     }
-
+    
     __start() {
         this.callback(this);
     }

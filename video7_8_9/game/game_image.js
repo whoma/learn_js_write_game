@@ -13,4 +13,8 @@ class Game_Image {
     update() {
         
     }
+
+    draw() {
+        this.game.drawImage(this);
+    }
 }

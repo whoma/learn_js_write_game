@@ -25,7 +25,9 @@ class GameScene {
 
     draw() {
         for (var e of this.element) {
-            this.game.drawImage(e);
+            if (e.life == undefined || e.life == true) {
+                e.draw();
+            }
         }
     }
 }
