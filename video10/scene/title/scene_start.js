@@ -19,11 +19,11 @@ class Scene_Start extends GameScene {
     }
 
     setInputs() {
-        this.game.registerAction('a', () => {
-            this.animations.move(-5);
+        this.game.registerAction('a', (action) => {
+            this.animations.move(-5, action);
         })
-        this.game.registerAction('d', () => {
-            this.animations.move(5);
+        this.game.registerAction('d', (action) => {
+            this.animations.move(5, action);
         })
 
     }

@@ -31,10 +31,10 @@ class Game {
 
     init() {
         window.addEventListener("keydown", (e) => {
-            this.keydowns[e.key] = true;
+            this.keydowns[e.key] = "down";
         });
         window.addEventListener("keyup", (e) => {
-            this.keydowns[e.key] = false;
+            this.keydowns[e.key] = "up";
         });
 
         this.context.font = "20px Georgia";
@@ -86,8 +86,12 @@ class Game {
         // events
         var keys = Object.keys(this.actions);
         for (var i = 0; i < keys.length; i++) {
-            if (this.keydowns[keys[i]]) {
-                this.actions[keys[i]]();
+            var status = this.keydowns[keys[i]];
+            if (status === 'down') {
+                this.actions[keys[i]]('down');
+            } else if (status === 'up') {
+                this.actions[keys[i]]('up');
+                this.keydowns[keys[i]] = null;
             }
         }
         // update
@@ -123,7 +127,7 @@ class Game {
             this.loopRun();
         }, 1000 / window.fps);
     }
-    
+
     __start() {
         this.callback(this);
     }

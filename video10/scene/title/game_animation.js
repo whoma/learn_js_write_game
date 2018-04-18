@@ -3,39 +3,55 @@
 class Game_Animation {
     constructor(game) {
         this.game = game;
-        this.animatoins = [];
+        this.animations = {
+            crouching: [],
+            running: [],
+        };
+        this.animationState = 'crouching';
         this.animationOfCount = 3;
         this.animationOfIndex = 0;
         this.setup();
     }
 
     setup() {
-        for (let i = 1; i < 12; i++) {
-            let name = `walking${i}`;
-            let a = this.game.imageByName(name);
-            this.animatoins.push(a);
+        for (let i = 1; i <= 12; i++) {
+            let name1 = `crouching${i}`;
+            let a1 = this.game.imageByName(name1);
+            this.animations['crouching'].push(a1);
+
+            let name2 = `running${i}`;
+            let a2 = this.game.imageByName(name2);
+            this.animations['running'].push(a2);
         }
         this.x = 400;
         this.y = 357;
-        this.texture = this.animatoins[this.animationOfIndex];
+        this.texture = this.getAnimations()[this.animationOfIndex];
         this.width = this.texture.width;
         this.height = this.texture.height;
         this.flipX = false;
+        this.actions = {
+            'down': 'running',
+            'up': 'crouching',
+        }
     }
 
-    move(x) {
+    move(x, action) {
         this.flipX = x < 0;
         this.x += x;
+        this.animationState = this.actions[action];
     }
 
     update() {
-        this.texture = this.animatoins[this.animationOfIndex];
         this.animationOfCount--;
         if (this.animationOfCount === 0) {
             this.animationOfCount = 3;
-            this.animationOfIndex = (this.animationOfIndex + 1) % this.animatoins.length;
-
+            this.animationOfIndex = (this.animationOfIndex + 1) % this.getAnimations().length;
+            this.texture = this.getAnimations()[this.animationOfIndex];
         }
+    }
+
+    getAnimations() {
+        return this.animations[this.animationState];
     }
 
     draw() {

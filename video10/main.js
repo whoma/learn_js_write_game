@@ -52,19 +52,11 @@ window.onload = function () {
             enemy4: "img/enemy4.png",
             fire: "img/fire.png",
             bg: "img/bg.png",
-            walking1: "img/walking/walking1.png",
-            walking2: "img/walking/walking2.png",
-            walking3: "img/walking/walking3.png",
-            walking4: "img/walking/walking4.png",
-            walking5: "img/walking/walking5.png",
-            walking6: "img/walking/walking6.png",
-            walking7: "img/walking/walking7.png",
-            walking8: "img/walking/walking8.png",
-            walking9: "img/walking/walking9.png",
-            walking10: "img/walking/walking10.png",
-            walking11: "img/walking/walking11.png",
-            walking12: "img/walking/walking12.png",
         }
+
+        //addImage(images, 'walking', 12);
+        addImage(images, 'running', 12);
+        addImage(images, 'crouching', 12);
         //
         var game = Game.getInstance(30, images, function (g) {
             var s = new Scene_Start(g);

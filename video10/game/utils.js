@@ -33,3 +33,10 @@ const config = {
     cloud_speed: 2,
     bullet_speed: 5,
 }
+
+const addImage = (images, name, length) => {
+    for (let i = 1; i <= length; i++) {
+        let n = name + i
+        images[n] = `img/${name}/${n}.png`;
+    }
+}
