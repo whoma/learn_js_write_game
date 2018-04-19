@@ -54,6 +54,7 @@ window.onload = function () {
             // bg: "img/bg.png",
             bg: "img/bird/background.png",
             ground: "img/bird/ground.png",
+            pipe: "img/bird/pipe.png",
         }
 
         //addImage(images, 'walking', 12);

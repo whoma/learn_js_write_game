@@ -15,10 +15,12 @@
     <script src="game/utils.js"></script>
     <script src="game/game_scene.js"></script>
     <script src="game/game_image.js"></script>
+    <script src="game/config.js"></script>
 
     <script src="scene/title/scene_start.js"></script>
     <script src="scene/title/game_animation.js"></script>
     <script src="scene/title/game_ground.js"></script>
+    <script src="scene/title/game_pipe.js"></script>
 
     <script src="scene/main/prayer.js"></script>
     <script src="scene/main/enemy.js"></script>
@@ -34,56 +36,67 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="400px" height="700px"></canvas>
+    <canvas id="canvas" width="300px" height="500px"></canvas>
     <hr>
     <input type="range" id="input-range" value="1" min="1">
     <script src="main.js"></script>
     <br>
+    <div class="insert_control_div"></div>
     <!-- <textarea id="input-text" cols="65" rows="30"></textarea> -->
-    <div>
-        <label>
-            <input type="range" class="game_auto_slider" value="10" data-value="config.player_speed"> 
-            玩家速度:<span class="game_label">10</span>
-        </label>
-    </div>
-    <div>
-            <label>
-                <input type="range" class="game_auto_slider" value="5" min="1" max="50" data-value="config.coolDown"> 
-                冷却时间:<span class="game_label">5</span>
-            </label>
-    </div>
-    <div>
-            <label>
-                <input type="range" class="game_auto_slider" value="2" min="-10" max="10" data-value="config.cloud_speed"> 
-                云速度:<span class="game_label">2</span>
-            </label>
-    </div>
-    <div>
-            <label>
-                <input type="range" class="game_auto_slider" value="5" min="1" max="60" data-value="config.bullet_speed"> 
-                子弹速度:<span class="game_label">5</span>
-            </label>
-    </div>
+    
+    <!--
     <audio src="./audio/bullet.mp3" id="audio_bullet" hidden></audio>
     <audio src="./audio/enemy_down.mp3" id="audio_enemy_down" hidden></audio>
+    -->
     <script>
         var el = sel => document.querySelectorAll(sel);
         var bindAll = (name, eventName, callback) => {
             var els = el(name);
             for (let e of els) {
-               e.addEventListener(eventName, (event) => {
+                e.addEventListener(eventName, (event) => {
                     callback(event);
                 })
             }
         }
-        bindAll('.game_auto_slider', 'input', (event) => {
-            let target = event.target;
-            let bindVar = target.dataset.value;
-            let v = target.value;
-            eval(bindVar + '=' + v);
-            let label = target.closest('label').querySelector('.game_label');
-            label.innerText = v;
-        })
+
+        var templetaControls = (key, item) => {
+            var t = `
+            <div>
+                <label>
+                     <input type="range" class="game_auto_slider" max=300 value="${item.value}" data-value="config.${key}"> 
+                     ${item.comment}:<span class="game_label">${item.value}</span>
+                </label>
+            </div>
+            `;
+
+            return t;
+        }
+
+        var insertControls = () => {
+            let div = el('.insert_control_div')[0];
+            for (let key in config) {
+                let item = config[key];
+                let html = templetaControls(key, item);
+                div.insertAdjacentHTML('afterend', html);
+            }
+        }
+
+        var bindEvents = () => {
+            bindAll('.game_auto_slider', 'input', (event) => {
+                let target = event.target;
+                let bindVar = target.dataset.value;
+                let v = target.value;
+                eval(bindVar + '.value =' + v);
+                let label = target.closest('label').querySelector('.game_label');
+                label.innerText = v;
+            })
+        }
+        let __main = () => {
+            insertControls();
+            bindEvents();
+        }
+
+        __main();
     </script>
 </body>
 

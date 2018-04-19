@@ -27,13 +27,6 @@ const randomBetween = (start, end) => {
     return Math.floor(n) + start;
 }
 
-const config = {
-    player_speed: 10,
-    coolDown: 5,
-    cloud_speed: 2,
-    bullet_speed: 5,
-}
-
 const addImage = (images, name, length) => {
     for (let i = 1; i <= length; i++) {
         let n = name + i

@@ -58,8 +58,8 @@ class Game_Animation {
     update() {
         this.y += this.vy;
         this.vy += this.gy * 0.2;
-        if (this.y > 580) {
-            this.y = 580;
+        if (this.y > 370) {
+            this.y = 370;
             this.alpha = 1;
         }
         if (this.rotate < 45) {

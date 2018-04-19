@@ -15,7 +15,9 @@ class Scene_Start extends GameScene {
         this.bg = new Game_Image(this.game, 'bg');
         this.ground = new Game_Ground(this.game);
         this.animations = new Game_Animation(this.game);
+        this.pipe = new Game_Pipe(this.game);
         this.addElement(this.bg);
+        this.addElement(this.pipe);
         this.addElement(this.ground);
         this.addElement(this.animations);
     }
