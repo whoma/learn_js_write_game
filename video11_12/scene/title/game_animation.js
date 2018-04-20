@@ -26,8 +26,8 @@ class Game_Animation {
             // let a2 = this.game.imageByName(name2);
             // this.animations['running'].push(a2);
         }
-        this.x = 100;
-        this.y = 357;
+        this.x = 50;
+        this.y = 100;
         this.gy = 10;
         this.vy = 0;
         this.rotate = 1;

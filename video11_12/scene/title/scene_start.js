@@ -32,6 +32,13 @@ class Scene_Start extends GameScene {
         this.game.registerAction('j', (action) => {
             this.animations.jump(action);
         })
+    }
 
+    update() {
+        super.update();
+        if (this.pipe.collide(this.animations)) {
+            let s = new Scene_End(this.game);
+            this.game.replaceScene(s);
+        }
     }
 }
