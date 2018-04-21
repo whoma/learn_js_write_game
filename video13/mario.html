@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mario</title>
+</head>
+
+<body>
+    <h3></h3>
+    <canvas id="id-canvas" width="640px" height="640px"></canvas>
+    <input type="file" id="id-file" onchange="fileChange(event)">
+    <div class="game-control">
+        <button data-action="change_offset" data-offset="-1024">-1024</button>
+        <button data-action="change_offset" data-offset="-16">-16</button>
+        <button data-action="change_offset" data-offset="16">+16</button>
+        <button data-action="change_offset" data-offset="1024">+1024</button>
+    </div>
+    <script>
+        const e = els => document.querySelector(els);
+        const log = console.log.bind(console);
+        // 替换用 ajax 加载数据，使用 input type="file" 获取 mario.nes
+        /*
+        const ajax = request => {
+            let r = new XMLHttpRequest();
+            r.open(request.method, request.url, true);
+            r.responseType = "arraybuffer";
+            r.onreadystatechange = () => {
+                if (r.readyState === 4) {
+                    request.callback(r.response);
+                }
+            }
+            r.send();
+        }
+        */
+        const drawBlock = (context, data, x, y, pixelWidth, blockSize) => {
+            const colors = [
+                'white',
+                '#FE1000',
+                '#FFB010',
+                '#AA3030',
+            ]
+            let w = pixelWidth;
+            let h = pixelWidth;
+            for (let i = 0; i < blockSize; i++) {
+                let p1 = data[i];
+                let p2 = data[i + 8];
+                for (let j = 0; j < blockSize; j++) {
+                    let c1 = (p1 >> (7 - j)) & 0b00000001;
+                    let c2 = (p2 >> (7 - j)) & 0b00000001;
+                    let pixel = (c2 << 1) + c1;
+                    let color = colors[pixel];
+                    context.fillStyle = color;
+                    let px = x + j * w;
+                    let py = y + i * h;
+                    context.fillRect(px, py, w, h);
+                }
+            }
+        }
+
+        const drawNes = bytes => {
+            let canvas = e('#id-canvas');
+            let context = canvas.getContext('2d');
+            let blockSize = 8;
+            let pixelSize = 8;
+            let pixelWidth = 10;
+            let numberOfbytesPerblock = 16;
+
+            for (let i = 0; i < blockSize; i++) {
+                for (let j = 0; j < blockSize; j++) {
+                    let x = j * pixelSize * pixelWidth;
+                    let y = i * pixelSize * pixelWidth;
+                    let index = window.offset + (i * 8 + j) * numberOfbytesPerblock;
+                    drawBlock(context, bytes.slice(index), x, y, pixelWidth, blockSize);
+                }
+            }
+        }
+
+        const fileChange = (event) => {
+            let f = event.target.files[0];
+            let reader = new FileReader();
+            reader.readAsArrayBuffer(f);
+            reader.onload = () => {
+                let bytes = new Uint8Array(reader.result);
+                window.bytes = bytes;
+                drawNes(bytes);
+            }
+        }
+
+        const actions = {
+            change_offset(offset) {
+                window.offset += offset;
+                e('h3').innerHTML = window.offset;
+                drawNes(window.bytes);
+            }
+        }
+
+        const bindEvent = () => {
+            e('.game-control').addEventListener('click', event => {
+                let action = event.target.dataset.action;
+                let offset = Number(event.target.dataset.offset);
+                actions[action] && actions[action](offset);
+            })
+        }
+        const __main = () => {
+            /*
+            let request = {
+                method: 'GET',
+                url: './mario.nes',
+                callback: (response) => {
+                    let bytes = new Uint8Array(response);
+                    log(bytes);
+                }
+            }
+
+            ajax(request);
+            */
+            window.offset = 32784;
+            bindEvent();
+        }
+
+        __main();
+    </script>
+</body>
+
+</html>
