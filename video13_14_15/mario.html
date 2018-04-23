@@ -6,12 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>mario</title>
+    <style media="screen">
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 
 <body>
     <h3></h3>
-    <canvas id="id-canvas" width="640px" height="640px"></canvas>
-    <canvas id="id-canvas-sprite" width="160px" height="320px"></canvas>
+    <canvas id="id-canvas" 
+    data-action="draw_tile"
+    data-type="source"
+    width="640px" height="640px"></canvas>
+    <canvas id="id-canvas-sprite" 
+    data-action="draw_tile"
+    data-type="tile"
+    width="160px" height="320px"></canvas>
+    <canvas id="" 
+    data-action="draw_tile"
+    data-type="tile"
+    width="160px" height="160px"></canvas>
+    <canvas id="" 
+    data-action="draw_tile"
+    data-type="tile"
+    width="480px" height="480px"></canvas>
     <input type="file" id="id-file" onchange="fileChange(event)">
     <div class="game-control">
         <button data-action="change_offset" data-offset="-1024">-1024</button>
@@ -36,16 +55,16 @@
             r.send();
         }
         */
-        const drawSprite = data => {
-            let context = e('#id-canvas-sprite').getContext('2d');
+        const drawSprite = (data, canvas, offsetX, offsetY, w, h) => {
+            let context = canvas.getContext('2d');
             let pixelsPerBlock = 8;
             let pixelWidth = 10;
             let blockSize = pixelsPerBlock * pixelWidth;
             let offset = 0;
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 2; j++) {
-                    let x = j * blockSize;
-                    let y = i * blockSize;
+            for (let i = 0; i < h; i++) {
+                for (let j = 0; j < w; j++) {
+                    let x = (offsetX + j) * blockSize;
+                    let y = (offsetY + i) * blockSize;
                     let pixels = data.slice(offset);
                     drawBlock(context, pixels, x, y, pixelWidth);
                     offset += 16;
@@ -69,6 +88,9 @@
                     let c1 = (p1 >> (7 - j)) & 0b00000001;
                     let c2 = (p2 >> (7 - j)) & 0b00000001;
                     let pixel = (c2 << 1) + c1;
+                    if (pixel === 0) {
+                        continue;
+                    }
                     let color = colors[pixel];
                     context.fillStyle = color;
                     let px = x + j * w;
@@ -104,33 +126,51 @@
                 let bytes = new Uint8Array(reader.result);
                 window.bytes = bytes;
                 drawNes(bytes);
-                let tileOffset = window.offset;
-                let step = 0;
-                let bytesPerBlock = 16;
-                let titlesPerSprite = 8;
-                let bytesPerSprite = bytesPerBlock * titlesPerSprite;
-                setInterval(() => {
-                    let offset = tileOffset + step * bytesPerSprite;
-                    drawSprite(bytes.slice(offset));
-                    step++;
-                    step %= 4;
-                }, 200)
+                // let tileOffset = window.offset;
+                // let step = 0;
+                // let bytesPerBlock = 16;
+                // let titlesPerSprite = 8;
+                // let bytesPerSprite = bytesPerBlock * titlesPerSprite;
+                // setInterval(() => {
+                //     let offset = tileOffset + step * bytesPerSprite;
+                //     drawSprite(bytes.slice(offset));
+                //     step++;
+                //     step %= 4;
+                // }, 200)
             }
         }
 
         const actions = {
-            change_offset(offset) {
+            change_offset(event) {
+                let offset = Number(event.target.dataset.offset);
                 window.offset += offset;
                 e('h3').innerHTML = window.offset;
                 drawNes(window.bytes);
+            },
+            draw_tile(event) {
+                let target = event.target;
+                let rect = target.getBoundingClientRect();
+                let x = event.clientX - rect.left;
+                let y = event.clientY - rect.top;
+                let i = Math.floor(x / 80);
+                let j = Math.floor(y / 80);
+                let bytesPerBlock = 16;
+                let type = target.dataset.type;
+                if (type === 'source') {
+                    let offset = i * bytesPerBlock + bytesPerBlock * 8 * j;
+                    window.tileOffset = offset + window.offset;
+                } else if (type === 'tile') {
+                    let data = window.bytes.slice(window.tileOffset);
+                    drawSprite(data, target, i, j, 1, 1);
+                }
+                log('draw tile', x, y, i, j);
             }
         }
 
         const bindEvent = () => {
-            e('.game-control').addEventListener('click', event => {
+            e('body').addEventListener('click', event => {
                 let action = event.target.dataset.action;
-                let offset = Number(event.target.dataset.offset);
-                actions[action] && actions[action](offset);
+                actions[action] && actions[action](event);
             })
         }
         const __main = () => {
