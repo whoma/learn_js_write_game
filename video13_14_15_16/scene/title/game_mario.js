@@ -10,10 +10,13 @@ class Game_Mario {
 
     setup() {
         this.x = 50;
-        this.y = 310;
+        this.y = 50;
+        // 重力和加速度
         this.gy = 10;
         this.vy = 0;
-
+        // 加速和摩擦
+        this.vx = 0;
+        this.mx = 0;
         this.animationOfCount = 4;
         this.animationOfIndex = 0;
         this.pixelWidth = 2;
@@ -74,7 +77,12 @@ class Game_Mario {
 
     move(x, action) {
         this.flipX = x < 0;
-        this.x += x;
+        // this.x += x;
+        let s = 0.5 * x;
+        if (action === 'down') {
+            this.vx += s;
+            this.mx = -s / 2;
+        }
     }
 
     jump(action) {
@@ -82,10 +90,21 @@ class Game_Mario {
     }
 
     update() {
+        // 更新 x 加速度和摩擦
+        this.vx += this.mx;
+        // 说明摩擦力已经把速度降至 0 ， 停止摩擦
+        if (this.vx * this.mx > 0) {
+            this.vx = 0;
+            this.mx = 0;
+        } else {
+            this.x += this.vx;
+        }
+
+        // 更新受力
         this.y += this.vy;
         this.vy += this.gy * 0.2;
-        if (this.y > 310) {
-            this.y = 310;
+        if (this.y > 50) {
+            this.y = 50;
         }
 
         this.animationOfCount--;

@@ -46,15 +46,14 @@ const fileChange = (event) => {
         
         // 加载图片
         var images = {
-            bg: "img/bird/background.png",
-            ground: "img/bird/ground.png",
-            pipe: "img/bird/pipe.png",
+            t1: 'img/tiles/t1.png',
+            t2: 'img/tiles/t2.png',
+            t3: 'img/tiles/t3.png',
+            t4: 'img/tiles/t4.png',
         }
 
-        addImage(images, 'bird', 4);
-
         var game = Game.getInstance(30, images, function (g) {
-            var s = new Scene_Start(g);
+            var s = new Scene_Editor(g);
             g.runWithScene(s);
         });
 
