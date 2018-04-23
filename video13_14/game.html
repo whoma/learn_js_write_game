@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>game video1</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+    <script src="game/game.js"></script>
+    <script src="game/utils.js"></script>
+    <script src="game/game_scene.js"></script>
+    <script src="game/game_image.js"></script>
+    <script src="game/config.js"></script>
+
+    <script src="scene/title/scene_start.js"></script>
+    <script src="scene/title/game_animation.js"></script>
+    <script src="scene/title/game_ground.js"></script>
+    <script src="scene/title/game_pipe.js"></script>
+    <script src="scene/title/game_mario.js"></script>
+
+    <script src="scene/main/prayer.js"></script>
+    <script src="scene/main/enemy.js"></script>
+    <script src="scene/main/bullet.js"></script>
+    <script src="scene/main/cloud.js"></script>
+    <script src="scene/main/scene.js"></script>
+    <script src="scene/main/particle.js"></script>
+    <script src="scene/main/game_particle.js"></script>
+
+    <script src="scene/end/scene_end.js"></script>
+
+    <script src="level.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas" width="300px" height="500px"></canvas>
+    <input type="file" id="id-file" onchange="fileChange(event)">
+    <hr>
+    <input type="range" id="input-range" value="1" min="1">
+    <script src="main.js"></script>
+    <br>
+    <div class="insert_control_div"></div>
+    <!-- <textarea id="input-text" cols="65" rows="30"></textarea> -->
+    
+    <!--
+    <audio src="./audio/bullet.mp3" id="audio_bullet" hidden></audio>
+    <audio src="./audio/enemy_down.mp3" id="audio_enemy_down" hidden></audio>
+    -->
+    <script>
+        var el = sel => document.querySelectorAll(sel);
+        var bindAll = (name, eventName, callback) => {
+            var els = el(name);
+            for (let e of els) {
+                e.addEventListener(eventName, (event) => {
+                    callback(event);
+                })
+            }
+        }
+
+        var templetaControls = (key, item) => {
+            var t = `
+            <div>
+                <label>
+                     <input type="range" class="game_auto_slider" max=300 value="${item.value}" data-value="config.${key}"> 
+                     ${item.comment}:<span class="game_label">${item.value}</span>
+                </label>
+            </div>
+            `;
+
+            return t;
+        }
+
+        var insertControls = () => {
+            let div = el('.insert_control_div')[0];
+            for (let key in config) {
+                let item = config[key];
+                let html = templetaControls(key, item);
+                div.insertAdjacentHTML('afterend', html);
+            }
+        }
+
+        var bindEvents = () => {
+            bindAll('.game_auto_slider', 'input', (event) => {
+                let target = event.target;
+                let bindVar = target.dataset.value;
+                let v = target.value;
+                eval(bindVar + '.value =' + v);
+                let label = target.closest('label').querySelector('.game_label');
+                label.innerText = v;
+            })
+        }
+        let __main = () => {
+            insertControls();
+            bindEvents();
+        }
+
+        __main();
+    </script>
+</body>
+
+</html>

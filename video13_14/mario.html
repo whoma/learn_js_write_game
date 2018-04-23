@@ -11,6 +11,7 @@
 <body>
     <h3></h3>
     <canvas id="id-canvas" width="640px" height="640px"></canvas>
+    <canvas id="id-canvas-sprite" width="160px" height="320px"></canvas>
     <input type="file" id="id-file" onchange="fileChange(event)">
     <div class="game-control">
         <button data-action="change_offset" data-offset="-1024">-1024</button>
@@ -35,7 +36,24 @@
             r.send();
         }
         */
-        const drawBlock = (context, data, x, y, pixelWidth, blockSize) => {
+        const drawSprite = data => {
+            let context = e('#id-canvas-sprite').getContext('2d');
+            let pixelsPerBlock = 8;
+            let pixelWidth = 10;
+            let blockSize = pixelsPerBlock * pixelWidth;
+            let offset = 0;
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 2; j++) {
+                    let x = j * blockSize;
+                    let y = i * blockSize;
+                    let pixels = data.slice(offset);
+                    drawBlock(context, pixels, x, y, pixelWidth);
+                    offset += 16;
+                }
+            }
+        }
+
+        const drawBlock = (context, data, x, y, pixelWidth) => {
             const colors = [
                 'white',
                 '#FE1000',
@@ -44,10 +62,10 @@
             ]
             let w = pixelWidth;
             let h = pixelWidth;
-            for (let i = 0; i < blockSize; i++) {
+            for (let i = 0; i < 8; i++) {
                 let p1 = data[i];
                 let p2 = data[i + 8];
-                for (let j = 0; j < blockSize; j++) {
+                for (let j = 0; j < 8; j++) {
                     let c1 = (p1 >> (7 - j)) & 0b00000001;
                     let c2 = (p2 >> (7 - j)) & 0b00000001;
                     let pixel = (c2 << 1) + c1;
@@ -73,7 +91,7 @@
                     let x = j * pixelSize * pixelWidth;
                     let y = i * pixelSize * pixelWidth;
                     let index = window.offset + (i * 8 + j) * numberOfbytesPerblock;
-                    drawBlock(context, bytes.slice(index), x, y, pixelWidth, blockSize);
+                    drawBlock(context, bytes.slice(index), x, y, pixelWidth);
                 }
             }
         }
@@ -86,6 +104,17 @@
                 let bytes = new Uint8Array(reader.result);
                 window.bytes = bytes;
                 drawNes(bytes);
+                let tileOffset = window.offset;
+                let step = 0;
+                let bytesPerBlock = 16;
+                let titlesPerSprite = 8;
+                let bytesPerSprite = bytesPerBlock * titlesPerSprite;
+                setInterval(() => {
+                    let offset = tileOffset + step * bytesPerSprite;
+                    drawSprite(bytes.slice(offset));
+                    step++;
+                    step %= 4;
+                }, 200)
             }
         }
 
