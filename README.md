@@ -23,4 +23,4 @@ video10: 实现动画效果，用到 Canvas 多个设置函数。
 
 video11 ~ video12: 实现 flappy bird 游戏。
 
-video13 ~ video18: 从马里奥 nes 中提取人物和背景，合并到 game 中。nes: [资料1](https://www.zhihu.com/question/19860051), [资料2](https://zhuanlan.zhihu.com/p/34144965)。萧大用的是本地 Ajax 获取的 nes 文件，因为有跨域问题，我改为 input 文件上传 nes。
+video13 ~ video18: 从马里奥 nes 中提取人物和背景，合并到 game 中。nes: [资料1](https://www.zhihu.com/question/19860051), [资料2](https://zhuanlan.zhihu.com/p/34144965)。萧大用的是本地 Ajax 获取的 nes 文件，因为有跨域问题，我改为 input 文件上传 nes。
