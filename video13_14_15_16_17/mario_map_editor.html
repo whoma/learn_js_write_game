@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mario map editor</title>
+    <style media="screen">
+        .canvas {
+            width: 512px;
+            margin: 0 auto;
+        }
+
+        div {
+            border: 1px solid black;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="map.js"></script>
+    <h3></h3>
+    <div class="canvas">
+        <canvas id="id-canvas" data-action="draw_tile" width="512px" height="480px"></canvas>
+    </div>
+    <div class="game-inline-block">
+        <img src="img/tiles/t1.png" alt="" data-action="change_active_tile" data-id="1">
+        <img src="img/tiles/t2.png" alt="" data-action="change_active_tile" data-id="2">
+        <img src="img/tiles/t3.png" alt="" data-action="change_active_tile" data-id="3">
+        <img src="img/tiles/t4.png" alt="" data-action="change_active_tile" data-id="4">
+    </div>
+    <div class="game-control">
+        <button data-action="change_offset" data-offset="-1024">-1024</button>
+        <button data-action="change_offset" data-offset="-16">-16</button>
+        <button data-action="change_offset" data-offset="16">+16</button>
+        <button data-action="change_offset" data-offset="1024">+1024</button>
+        <button data-action="clear_tile" data-selector="#id-canvas-tile">清空</button>
+    </div>
+
+    <script>
+        const e = els => document.querySelector(els);
+        const log = console.log.bind(console);
+
+        const actions = {
+            change_active_tile(event) {
+                let id = Number(event.target.dataset.id);
+                window.map.actionTile = event.target;
+            },
+        }
+
+        const bindEvent = () => {
+            e('body').addEventListener('click', event => {
+                let action = event.target.dataset.action;
+                actions[action] && actions[action](event);
+            })
+
+            window.map.registerAction();
+        }
+
+        const init = () => {
+            let canvas = e('canvas');
+            window.map = new Map(canvas);
+            window.map.init();
+        }
+        const __main = () => {
+            init();
+            bindEvent();
+        }
+
+        __main();
+    </script>
+</body>
+
+</html>
