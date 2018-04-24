@@ -1,8 +1,10 @@
 'use strict'
 
 class Game_Mario {
-    constructor(game) {
+    constructor(game, map) {
         this.game = game;
+        this.map = map;
+        this.tileSize = map.tileSize;
         this.tileOffset = 32784;
         this.data = window.bytes.slice(this.tileOffset);
         this.setup();
@@ -17,6 +19,7 @@ class Game_Mario {
         // 加速和摩擦
         this.vx = 0;
         this.mx = 0;
+        this.maxSpeed = 10;
         this.animationOfCount = 4;
         this.animationOfIndex = 0;
         this.pixelWidth = 2;
@@ -81,12 +84,38 @@ class Game_Mario {
         let s = 0.5 * x;
         if (action === 'down') {
             this.vx += s;
+            if (Math.abs(this.vx) >= this.maxSpeed) {
+                this.vx = parseInt(this.vx);
+            }
             this.mx = -s / 2;
         }
     }
 
     jump(action) {
         this.vy = -10;
+    }
+
+    updateGravity() {
+        // 拿到角色在地图中的坐标 i j
+        let i = Math.floor((this.x + 16) / this.tileSize);
+        let j = Math.floor((this.y + 32) / this.tileSize) + 2;
+        let onTheGround = this.map.onTheGround(i, j);
+        if (onTheGround && this.vy > 0) {
+            this.vy = 0;
+        } else {
+            this.y += this.vy;
+            this.vy += this.gy * 0.2;
+            // 如果在地面中，就退一格
+            let j = Math.floor(this.y / this.tileSize) + 2;
+            let onTheGround = this.map.onTheGround(i, j);
+            if (onTheGround) {
+                this.y = (j - 2) * this.tileSize + 32;
+            }
+            // let h = 50;
+            // if (this.y > h) {
+            //     this.y = h;
+            // }
+        }
     }
 
     update() {
@@ -100,12 +129,7 @@ class Game_Mario {
             this.x += this.vx;
         }
 
-        // 更新受力
-        this.y += this.vy;
-        this.vy += this.gy * 0.2;
-        if (this.y > 50) {
-            this.y = 50;
-        }
+        this.updateGravity();
 
         this.animationOfCount--;
         if (this.animationOfCount === 0) {
@@ -121,8 +145,6 @@ class Game_Mario {
         if (this.flipX) {
             this.game.context.scale(-1, 1);
         }
-        this.game.context.globalAlpha = this.alpha;
-        this.game.context.rotate(this.rotate * Math.PI / 180);
         this.game.context.translate(-this.x, -this.y);
         // draw mario
         this.drawSprite();

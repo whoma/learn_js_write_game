@@ -8,10 +8,10 @@ class Scene_Editor extends GameScene {
     }
 
     setup() {
-        this.mario = new Game_Mario(this.game);
         this.tileMap = new Game_TileMap(this.game);
-        this.addElement(this.mario);
+        this.mario = new Game_Mario(this.game, this.tileMap);
         this.addElement(this.tileMap);
+        this.addElement(this.mario);
     }
 
     setInputs() {
