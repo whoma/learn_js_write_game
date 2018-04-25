@@ -1,17 +1,5 @@
 'use strict'
 
-// var loadLevel = function (game, n) {
-//     n = n - 1;
-//     var level = levels[n]
-//     var blocks = [];
-//     for (let p of level) {
-//         let b = Block(p, game);
-//         blocks.push(b);
-//     }
-
-//     return blocks;
-// };
-// var blocks = [];
 var enableDebugModel = function (game, enable) {
     if (!enable) {
         return
@@ -42,6 +30,7 @@ window.onload = function () {
         // 加载图片
         var images = {
             gun1: 'img/gun1.png',
+            enemy1: 'img/enemy.png',
         }
 
         var game = Game.getInstance(30, images, function (g) {

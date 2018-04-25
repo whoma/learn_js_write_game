@@ -23,8 +23,14 @@ class Game_Image {
         return xIn && yIn;
     }
 
+    center() {
+        let x = this.x + this.width / 2;
+        let y = this.y + this.height / 2;
+        return new Vector(x, y);
+    }
+
     update() {
-        
+
     }
 
     draw() {

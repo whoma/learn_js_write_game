@@ -8,10 +8,37 @@ class Scene_Start extends GameScene {
     }
 
     setup() {
-        this.gun = new Game_Image(this.game, 'gun1');
-        this.gun.x = 500;
-        this.gun.y = 200;
-        this.addElement(this.gun);
+        this.towers = [];
+        this.enemies = [];
+
+        this.setupEnemys();
+        this.setupTowers();
+        // UI
+        this.setupHID();
+    }
+
+    setupHID() {
+        let tower = new Tower(this.game);
+        tower.x = 500;
+        tower.y = 300;
+        this.addElement(tower);
+    }
+
+    setupTowers() {
+        let tower1 = new Tower(this.game);
+        this.addElement(tower1);
+        this.towers.push(tower1);
+    }
+
+    setupEnemys() {
+        let enemy1 = new Enemy(this.game);
+        let enemy2 = new Enemy(this.game);
+        enemy2.x += 35;
+        this.addElement(enemy1);
+        this.addElement(enemy2);
+
+        this.enemies.push(enemy1);
+        this.enemies.push(enemy2);
     }
 
     setInputs() {
@@ -42,5 +69,10 @@ class Scene_Start extends GameScene {
 
     update() {
         super.update();
+        for (let t of this.towers) {
+            if (!t.hasTarget()) {
+                t.findTarget(this.enemies);
+            }
+        }
     }
 }
