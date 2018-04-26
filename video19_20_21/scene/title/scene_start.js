@@ -18,10 +18,10 @@ class Scene_Start extends GameScene {
     }
 
     setupHID() {
-        let tower = new Tower(this.game);
-        tower.x = 500;
-        tower.y = 300;
-        this.addElement(tower);
+        this.tower = new Tower(this.game);
+        this.tower.x = 500;
+        this.tower.y = 300;
+        this.addElement(this.tower);
     }
 
     setupTowers() {
@@ -31,14 +31,12 @@ class Scene_Start extends GameScene {
     }
 
     setupEnemys() {
-        let enemy1 = new Enemy(this.game);
-        let enemy2 = new Enemy(this.game);
-        enemy2.x += 35;
-        this.addElement(enemy1);
-        this.addElement(enemy2);
-
-        this.enemies.push(enemy1);
-        this.enemies.push(enemy2);
+        for (let i = 0; i < 3; i++) {
+            let enemy = new Enemy(this.game);
+            enemy.y += 20 * i;
+            this.addElement(enemy);
+            this.enemies.push(enemy);
+        }
     }
 
     setInputs() {
@@ -48,10 +46,10 @@ class Scene_Start extends GameScene {
             let x = event.offsetX;
             let y = event.offsetY;
             if (status === 'down') {
-                let click = this.gun.pointInFrame(x, y);
+                let click = this.tower.pointInFrame(x, y);
                 if (click) {
                     startDrag = true;
-                    tower = this.gun.clone();
+                    tower = this.tower.clone();
                     this.addElement(tower);
                 }
             }

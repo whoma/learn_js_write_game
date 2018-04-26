@@ -8,10 +8,11 @@ class Enemy extends Game_Image {
     }
 
     setup() {
-        this.x = 50;
+        this.x = 10;
         this.y = 200;
-        this.speed = 5;
-        this.hp = 3;
+        this.speed = 2;
+        this.maxHP = 3;
+        this.hp = this.maxHP;
         this.destination = 640;
         this.alive = true;
     }
@@ -22,6 +23,22 @@ class Enemy extends Game_Image {
         }
 
         this.x += this.speed;
+    }
+
+    drawLifeBar() {
+        this.game.context.fillStyle = 'red';
+        let [x, y] = [this.x, this.y - 10];
+        let w = this.width;
+        this.game.context.fillRect(x, y, w, 10);
+        this.game.context.fillStyle = 'green';
+        w = this.width * (this.hp / this.maxHP);
+        this.game.context.fillRect(x, y, w, 10);
+    }
+
+    draw() {
+        super.draw();
+        
+        this.drawLifeBar();
     }
 
     die() {

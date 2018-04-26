@@ -8,6 +8,7 @@ class Game_Image {
         this.y = 0;
         this.width = this.texture.width;
         this.height = this.texture.height;
+        this.rotation = 0;
     }
 
     clone() {
@@ -34,6 +35,13 @@ class Game_Image {
     }
 
     draw() {
-        this.game.drawImage(this);
+        this.game.context.save();
+        let w2 = this.width / 2;
+        let h2 = this.height / 2;
+        this.game.context.translate(this.x + w2, this.y + h2);
+        this.game.context.rotate(this.rotation * Math.PI / 180);
+        this.game.context.translate(-w2, -h2);
+        this.game.context.drawImage(this.texture, 0, 0);
+        this.game.context.restore();
     }
 }
