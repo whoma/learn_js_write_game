@@ -15,6 +15,7 @@ class Tower extends Game_Image {
         this.attack = 1;
         this._coolDown = 5;
         this._fireCount = 0;
+        this.tileSize = this.width;
     }
 
     updateRotation() {

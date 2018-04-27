@@ -11,13 +11,16 @@ class Scene_Start extends GameScene {
         this.towers = [];
         this.enemies = [];
 
-        this.setupEnemys();
-        this.setupTowers();
         // UI
         this.setupHID();
+
+        this.setupEnemys();
+        this.setupTowers();
     }
 
     setupHID() {
+        this.map = new FPMap(12, 8);
+
         this.tower = new Tower(this.game);
         this.tower.x = 500;
         this.tower.y = 300;
@@ -25,13 +28,19 @@ class Scene_Start extends GameScene {
     }
 
     addTowers(x, y) {
-        x = Math.floor(x / 100) * 100;
-        y = Math.floor(y / 100) * 100;
+        let i = Math.floor(x / this.tower.tileSize);
+        let j = Math.floor(y / this.tower.tileSize);
+        x = i * this.tower.tileSize;
+        y = j * this.tower.tileSize;
         let tower = new Tower(this.game);
         tower.x = x;
         tower.y = y;
         this.addElement(tower);
         this.towers.push(tower);
+        this.map.addTowers(i, j);
+        // update enemy road data
+
+        this.map.pathFinding(this.enemies, this.tower.tileSize);
     }
 
     setupTowers() {
@@ -90,7 +99,5 @@ class Scene_Start extends GameScene {
                 t.findTarget(this.enemies);
             }
         }
-
-
     }
 }

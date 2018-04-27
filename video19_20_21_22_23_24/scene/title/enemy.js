@@ -14,15 +14,15 @@ class Enemy extends Game_Image {
         this.maxHP = 13;
         this.hp = this.maxHP;
         this.alive = true;
+    }
 
+    resetWaypoints(map, tileSize) {
+        let grid = [];
+        for (let m of map) {
+            grid.push([m[0] * tileSize, m[1] * tileSize]);
+        }
         this.stepIndex = 0;
-        this.waypoints = [
-            [5, 10],
-            [170, 10],
-            [170, 100],
-            [640, 200],
-        ]
-
+        this.waypoints = grid;
     }
 
     update() {
@@ -34,7 +34,7 @@ class Enemy extends Game_Image {
         let signY = (dy > this.y) ? 1 : -1;
         if (dx === this.x) {
             signX = 0;
-        } 
+        }
         if (dy === this.y) {
             signY = 0;
         }
@@ -43,6 +43,7 @@ class Enemy extends Game_Image {
         if (this.x === dx && this.y === dy) {
             this.stepIndex++;
             if (this.stepIndex === this.waypoints.length) {
+                log('敌人到达!');
                 this.die();
             }
         }
@@ -59,13 +60,18 @@ class Enemy extends Game_Image {
     }
 
     draw() {
+        this.game.context.fillStyle = 'pink';
+        for (let w of this.waypoints) {
+            this.game.context.fillRect(w[0], w[1], 20, 20);
+        }
+
         super.draw();
-        
+
         this.drawLifeBar();
     }
 
     die() {
-        this.alive = false; 
+        this.alive = false;
         // 现象
         // 移除场景 
         this.scene.removeElement(this);
