@@ -17,50 +17,9 @@ class Tower extends Game_Image {
         this._fireCount = 0;
     }
 
-    decideDirection(vector) {
-        let v = vector;
-        if (this.target.x >= this.x) {
-            v.x *= -1;
-        }
-        if (this.target.y <= this.y) {
-            v.y *= -1;
-        }
-
-        return v;
-    }
-
-    decideRotation(vector) {
-        let v = vector;
-        let x = v.x;
-        let y = v.y;
-        let r = 0;
-        if (y === 0) {
-            if (x > 0) {
-                r = -90;
-            } else {
-                r = 90;
-            }
-        }
-        if (x === 0) {
-            if (y > 0) {
-                r = 0;
-            } else {
-                r = -180;
-            }
-        }
-        if (x != 0 && y != 0) {
-            r = arcTan(y, x);
-        }
-
-        return r;
-    }
-
     updateRotation() {
         let v = this.center().sub(this.target.center())
-        // 校准方向
-        v = this.decideDirection(v);
-        // 校准角度
-        this.rotation = this.decideRotation(v);
+        this.rotation = arcTan(-v.x, v.y)
     }
 
     fire() {

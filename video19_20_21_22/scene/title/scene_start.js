@@ -24,16 +24,27 @@ class Scene_Start extends GameScene {
         this.addElement(this.tower);
     }
 
+    addTowers(x, y) {
+        x = Math.floor(x / 100) * 100;
+        y = Math.floor(y / 100) * 100;
+        let tower = new Tower(this.game);
+        tower.x = x;
+        tower.y = y;
+        this.addElement(tower);
+        this.towers.push(tower);
+    }
+
     setupTowers() {
-        let tower1 = new Tower(this.game);
-        this.addElement(tower1);
-        this.towers.push(tower1);
+        this.addTowers(100, 100);
+        this.addTowers(100, 200);
     }
 
     setupEnemys() {
-        for (let i = 0; i < 3; i++) {
+        let offsetY = [0, 50];
+        for (let i = 0; i < 23; i++) {
             let enemy = new Enemy(this.game);
-            enemy.y += 20 * i;
+            enemy.x -= i * 20;
+            enemy.y += offsetY[i % 2];
             this.addElement(enemy);
             this.enemies.push(enemy);
         }
@@ -42,6 +53,8 @@ class Scene_Start extends GameScene {
     setInputs() {
         let tower = null;
         let startDrag = false;
+        let offsetX = 0;
+        let offsetY = 0;
         this.game.registerMouse((event, status) => {
             let x = event.offsetX;
             let y = event.offsetY;
@@ -51,14 +64,19 @@ class Scene_Start extends GameScene {
                     startDrag = true;
                     tower = this.tower.clone();
                     this.addElement(tower);
+                    offsetX = this.tower.x - x;
+                    offsetY = this.tower.y - y;
                 }
             }
             else if (status === 'move') {
                 if (startDrag) {
-                    tower.x = x;
-                    tower.y = y;
+                    tower.x = x + offsetX;
+                    tower.y = y + offsetY;
                 }
             } else {
+                if (startDrag) {
+                    this.addTowers(x, y);
+                }
                 startDrag = false;
                 this.removeElement(tower);
             }
@@ -72,5 +90,7 @@ class Scene_Start extends GameScene {
                 t.findTarget(this.enemies);
             }
         }
+
+
     }
 }

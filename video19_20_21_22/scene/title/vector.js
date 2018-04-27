@@ -15,8 +15,8 @@ class Vector {
 
     sub(vector) {
         let v = vector;
-        let x = Math.abs(this.x - v.x);
-        let y = Math.abs(this.y - v.y);
+        let x = this.x - v.x;
+        let y = this.y - v.y;
         return new Vector(x, y);
     }
 }

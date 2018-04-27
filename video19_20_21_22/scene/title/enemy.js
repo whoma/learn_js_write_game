@@ -9,20 +9,43 @@ class Enemy extends Game_Image {
 
     setup() {
         this.x = 10;
-        this.y = 200;
-        this.speed = 2;
-        this.maxHP = 3;
+        this.y = 150;
+        this.speed = 1;
+        this.maxHP = 13;
         this.hp = this.maxHP;
-        this.destination = 640;
         this.alive = true;
+
+        this.stepIndex = 0;
+        this.waypoints = [
+            [5, 10],
+            [170, 10],
+            [170, 100],
+            [640, 200],
+        ]
+
     }
 
     update() {
-        if (this.x > this.destination) {
+        if (this.alive == false) {
             return;
         }
-
-        this.x += this.speed;
+        let [dx, dy] = this.waypoints[this.stepIndex];
+        let signX = (dx > this.x) ? 1 : -1;
+        let signY = (dy > this.y) ? 1 : -1;
+        if (dx === this.x) {
+            signX = 0;
+        } 
+        if (dy === this.y) {
+            signY = 0;
+        }
+        this.x += signX * this.speed;
+        this.y += signY * this.speed;
+        if (this.x === dx && this.y === dy) {
+            this.stepIndex++;
+            if (this.stepIndex === this.waypoints.length) {
+                this.die();
+            }
+        }
     }
 
     drawLifeBar() {
