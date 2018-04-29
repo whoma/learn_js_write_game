@@ -20,14 +20,15 @@ class Zombile extends Game_Animation {
         this.setup();
     }
 
+    setup() {
+        this.x = 10;
+        this.y = 150;
+        this.row = -1;
+    }
+
     update() {
         super.update();
 
         this.x -= 0.31;
-    }
-
-    setup() {
-        this.x = 10;
-        this.y = 150;
     }
 }

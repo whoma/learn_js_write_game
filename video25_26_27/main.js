@@ -55,6 +55,7 @@ window.onload = function () {
 
         var images = {
             bg1: './img/background1.jpg',
+            bp1: './img/pb1.gif',
         };
         addAnimation(images, animationZombile);
         addAnimation(images, animationPeashooter);
