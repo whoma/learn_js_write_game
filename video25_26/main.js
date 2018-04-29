@@ -27,7 +27,7 @@ var enableDebugModel = function (game, enable) {
 // DOM finish do
 window.onload = function () {
     var __main = function () {
-        let animation = {
+        let animationZombile = {
             name: 'zombile',
             formatPath: './img/zombile/{action}/zombile_{action}_{index}.png',
             actions: [
@@ -42,8 +42,22 @@ window.onload = function () {
             ],
         }
 
-        var images = {};
-        addAnimation(images, animation);
+        let animationPeashooter = {
+            name: 'peashooter',
+            formatPath: './img/peashooter/{action}/peashooter_{action}_{index}.png',
+            actions: [
+                {
+                    name: 'idle',
+                    length: 13,
+                },
+            ],
+        }
+
+        var images = {
+            bg1: './img/background1.jpg',
+        };
+        addAnimation(images, animationZombile);
+        addAnimation(images, animationPeashooter);
 
         var game = Game.getInstance(30, images, function (g) {
             var s = new Scene_Start(g);

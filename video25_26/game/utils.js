@@ -22,7 +22,7 @@ const addAnimation = (images, animation) => {
     for (let a of animation.actions) {
         for (let i = 0; i < a.length; i++) {
             let p = animation.formatPath.replace(/{action}/g, a.name);
-            let index = '0'.repeat(animation.actions.length - String(i).length) + String(i);
+            let index = '0'.repeat(String(a.length).length - String(i).length) + String(i);
             let key = animation.name + '_' + a.name + '_' + index;
             let value = p.replace(/{index}/, index);
             images[key] = value;
