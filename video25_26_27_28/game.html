@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>game video1</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+    <script src="game/game.js"></script>
+    <script src="game/utils.js"></script>
+    <script src="game/game_scene.js"></script>
+    <script src="game/game_image.js"></script>
+    <script src="game/config.js"></script>
+
+    <script src="scene/title/scene_start.js"></script>
+    <script src="scene/title/game_animation.js"></script>
+    <script src="scene/title/zombile.js"></script>
+    <script src="scene/title/peashooter.js"></script>
+    <script src="scene/title/peabullet.js"></script>
+
+</head>
+
+<body>
+    <canvas id="canvas" width="1400px" height="600px"></canvas>
+    <hr>
+    <input type="range" id="input-range" value="1" min="1">
+    <script src="main.js"></script>
+    <br>
+    <div class="insert_control_div"></div>
+
+
+
+    <script>
+
+        var bindAll = (name, eventName, callback) => {
+            var els = el(name);
+            for (let e of els) {
+                e.addEventListener(eventName, (event) => {
+                    callback(event);
+                })
+            }
+        }
+
+        var templetaControls = (key, item) => {
+            let min = item.min || 0;
+            let max = item.max || 300;
+            var t = `
+            <div>
+                <label>
+                     <input type="range" class="game_auto_slider" min=${min} max=${max} value="${item.value}" data-value="config.${key}"> 
+                     ${item.comment}:<span class="game_label">${item.value}</span>
+                </label>
+            </div>
+            `;
+
+            return t;
+        }
+
+        var insertControls = () => {
+            let div = el('.insert_control_div')[0];
+            for (let key in config) {
+                let item = config[key];
+                let html = templetaControls(key, item);
+                div.insertAdjacentHTML('afterend', html);
+            }
+        }
+
+        var bindEvents = () => {
+            bindAll('.game_auto_slider', 'input', (event) => {
+                let target = event.target;
+                let bindVar = target.dataset.value;
+                let v = target.value;
+                eval(bindVar + '.value =' + v);
+                let label = target.closest('label').querySelector('.game_label');
+                label.innerText = v;
+            })
+        }
+        let __main = () => {
+            insertControls();
+            bindEvents();
+        }
+
+        __main();
+    </script>
+</body>
+
+</html>

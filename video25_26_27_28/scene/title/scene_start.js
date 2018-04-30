@@ -6,12 +6,17 @@ class Scene_Start extends GameScene {
         this.setup();
     }
 
+    debug() {
+        this.bulletHitOffset = config.hit_offset.value;
+    }
+
     setup() {
         this.offsetX = 255;
         this.offsetY = 100;
         this.widthOfColumn = 80;
         this.heightOfRow = 100;
         this.offsetYZombile = 20;
+        this.bulletHitOffset = -35;
         this.plants = [];
         this.zombiles = [];
         this.bullets = [];
@@ -33,7 +38,7 @@ class Scene_Start extends GameScene {
     }
 
     setPeaShooter() {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 1; i++) {
             for (let j = 0; j < 5; j++) {
                 let p = new PeaShooter(this.game);
                 this.addPlant(p, i, j);
@@ -73,6 +78,16 @@ class Scene_Start extends GameScene {
         })
     }
 
+    removeZombile(zombile) {
+        this.zombiles = this.zombiles.filter(e => e != zombile);
+        this.removeElement(zombile);
+    }
+
+    removeBullet(bullet) {
+        this.bullets = this.bullets.filter(e => e != bullet);
+        this.removeElement(bullet);
+    }
+
     updateFire() {
         for (let p of this.plants) {
             let row = p.row;
@@ -89,8 +104,9 @@ class Scene_Start extends GameScene {
             let row = b.row;
             for (let z of this.zombiles) {
                 if (row === z.row) {
-                    if (b.x - z.x > 5 ) {
-                        b.fade();
+                    if (z.x - b.x < this.bulletHitOffset) {
+                        b.remove();
+                        z.hited(b.damage);
                     }
                 }
             }

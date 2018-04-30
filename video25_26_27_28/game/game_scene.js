@@ -12,11 +12,12 @@ class GameScene {
         this.element.push(e);
     }
 
-    removeElement(tower) {
-        this.element = this.element.filter(e => e != tower);
+    removeElement(element) {
+        this.element = this.element.filter(e => e != element);
     }
 
     update() {
+        this.debug && this.debug();
         if (this.enableDebugModel) {
             for (var e of this.element) {
                 e.debug && e.debug();

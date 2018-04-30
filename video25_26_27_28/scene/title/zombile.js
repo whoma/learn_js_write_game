@@ -24,6 +24,18 @@ class Zombile extends Game_Animation {
         this.x = 10;
         this.y = 150;
         this.row = -1;
+        this.hp = 4;
+    }
+
+    hited(damage) {
+        this.hp -= damage;
+        if (this.hp === 0) {
+            this.die();
+        }
+    }
+
+    die() {
+        this.scene.removeZombile(this);
     }
 
     update() {
