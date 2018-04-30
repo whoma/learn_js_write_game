@@ -26,3 +26,5 @@ video11 ~ video12: 实现 flappy bird 游戏。
 video13 ~ video18: 从马里奥 nes 中提取人物和背景，合并到 game 中。nes: [资料1](https://www.zhihu.com/question/19860051), [资料2](https://zhuanlan.zhihu.com/p/34144965)。萧大用的是本地 Ajax 获取的 nes 文件，因为有跨域问题，我改为 input 文件上传 nes。
 
 video19 ~ video24: 实现塔防游戏的最小系统，其中敌人寻路路径用到了[该库](https://github.com/bgrins/javascript-astar)。
+
+video25 ~ video28: 实现植物大战僵尸最小系统。
